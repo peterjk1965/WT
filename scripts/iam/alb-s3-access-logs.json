@@ -1,0 +1,38 @@
+{
+    "Version": "2012-10-17",
+    "Id": "wildthing-alb-pilicy",
+    "Statement": [
+        {
+            "Sid": "root-access",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::033677994240:root"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::wt-alb-access-logs/AWSLogs/986120353101/*"
+        },
+        {
+            "Sid": "log-delivery",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "delivery.logs.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::wt-alb-access-logs/AWSLogs/986120353101/*",
+            "Condition": {
+                "StringEquals": {
+                    "s3:x-amz-acl": "bucket-owner-full-control"
+                }
+            }
+        },
+        {
+            "Sid": "log-delivery-access-check",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "delivery.logs.amazonaws.com"
+            },
+            "Action": "s3:GetBucketAcl",
+            "Resource": "arn:aws:s3:::wt-alb-access-logs"
+        }
+    ]
+}
